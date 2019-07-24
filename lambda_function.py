@@ -27,16 +27,16 @@ scopes = 'User.Read Files.ReadWrite.All offline_access',
 # )
 
 def lambda_handler(event, context):
-    
+
     qs = urllib.parse.parse_qs(event['body-json'])
     print(qs)
-    
+
     args = qs['text'][0].split(" ")
-    
+
     type = ""
     spec_date = ""
     spec_time = ""
-    
+
     for str in args:
         if re.match("entry|exit", str):
             type = str
@@ -46,7 +46,7 @@ def lambda_handler(event, context):
             spec_time = str
         else:
             print("")
-    
+
     user = qs['user_name'][0]
 
     return update_work_sheet(type=type, spec_date=spec_date, spec_time=spec_time, user=user)
@@ -106,7 +106,7 @@ def update_work_sheet(type, spec_date=None, spec_time=None, user="someone"):
 
     col = date[6:8]
 
-    row_time = "B" 
+    row_time = "B"
     row_user = "C"
     if type == "exit":
         row_time = "D"
@@ -125,7 +125,7 @@ def update_work_sheet(type, spec_date=None, spec_time=None, user="someone"):
         data = json.dumps(payload)
     )
     print(response.text)
-    
+
     message = {
         'text': '[{0}] {1} {2}'.format(type, date, time),
         'response_type': "ephemeral"
@@ -151,6 +151,6 @@ def select_work_sheet():
         headers = headers,
     )
     json_obj = json.loads(response.text)['text']
-    
+
     for date, time in json_obj:
         print(date + " " + time)
