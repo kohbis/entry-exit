@@ -6,10 +6,10 @@ ENV APP_ROOT /app
 WORKDIR $APP_ROOT
 COPY . $APP_ROOT
 
-RUN apt-get update -y \
-    && apt-get install -y --no-install-recommends \
+RUN apt update -y \
+    && apt install -y --no-install-recommends \
         vim git less zip \
-    && apt-get clean \
+    && apt clean \
     && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p ${APP_ROOT}/package
